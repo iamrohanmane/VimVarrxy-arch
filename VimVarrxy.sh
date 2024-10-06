@@ -77,7 +77,7 @@ spinner $!
 
 # Step 8: Clone the VimVarxxy repository to /tmp
 echo "Cloning VimVarxxy repository..."
-git clone https://github.com/varrxy/VimVarxxy "$TEMP_DIR/VimVarxxy" &
+git clone https://github.com/varrxy/VimVarrxy "$TEMP_DIR/VimVarxxy" &
 spinner $!
 
 # Step 9: Move files to appropriate locations
