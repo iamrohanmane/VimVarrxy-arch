@@ -48,42 +48,28 @@ if ! grep -q '/opt/nvim-linux64/bin' "$shell_config"; then
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> "$shell_config"
 fi
 
-# Step 5: Install vim-plug
-echo "Installing vim-plug..."
-mkdir -p "$TEMP_DIR/nvim/autoload"
-curl -fLo "$TEMP_DIR/nvim/autoload/plug.vim" --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &
+# Step 5: Create the Neovim configuration directory
+mkdir -p ~/.config/nvim
+
+# Step 6: Clone the VimVarrxy repository to a temporary directory
+echo "Cloning VimVarrxy repository..."
+git clone https://github.com/varrxy/VimVarrxy "$TEMP_DIR/VimVarrxy" &
 spinner $!
 
-# Step 6: Set up Neovim configuration
-mkdir -p "$TEMP_DIR/nvim"
-cat <<EOF > "$TEMP_DIR/nvim/init.vim"
-call plug#begin('~/.config/nvim/plugged')
+# Step 7: Copy files to the existing Neovim configuration directory
+echo "Copying VimVarrxy files to existing Neovim configuration directory..."
+cp -r "$TEMP_DIR/VimVarrxy/"* "$HOME/.config/nvim/" & spinner $!
 
-" Add your plugins here
-" Example:
-" Plug 'tpope/vim-sensible'
+# Step 8: Install vim-plug
+echo "Installing vim-plug..."
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' &
+spinner $!
 
-call plug#end()
-
-syntax enable
-filetype plugin indent on
-EOF
-
-# Step 7: Install additional packages (ripgrep, fd-find)
+# Step 9: Install additional packages (ripgrep, fd-find)
 echo "Installing ripgrep and fd-find..."
 sudo apt install -y ripgrep fd-find &
 spinner $!
-
-# Step 8: Clone the VimVarxxy repository to /tmp
-echo "Cloning VimVarxxy repository..."
-git clone https://github.com/varrxy/VimVarrxy "$TEMP_DIR/VimVarxxy" &
-spinner $!
-
-# Step 9: Move files to appropriate locations
-echo "Moving Neovim and VimVarxxy files to their configuration directories..."
-mv "$TEMP_DIR/nvim/"* ~/.config/nvim/
-mv "$TEMP_DIR/VimVarxxy/"* ~/.config/nvim/
 
 # Step 10: Install plugins
 echo "Installing plugins with vim-plug..."
