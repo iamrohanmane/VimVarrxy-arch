@@ -53,7 +53,7 @@ mkdir -p ~/.config/nvim
 
 # Step 6: Clone the VimVarrxy repository to a temporary directory
 echo "Cloning VimVarrxy repository..."
-git clone https://github.com/varrxy/VimVarrxy "$TEMP_DIR/VimVarrxy" &
+git clone https://github.com/iamrohanmane/VimVarrxy-arch.git "$TEMP_DIR/VimVarrxy" &
 spinner $!
 
 # Step 7: Copy files to the existing Neovim configuration directory
@@ -68,7 +68,7 @@ spinner $!
 
 # Step 9: Install additional packages (ripgrep, fd-find)
 echo "Installing ripgrep and fd-find..."
-sudo apt install -y ripgrep fd-find &
+sudo pacman -Sy ripgrep fd &
 spinner $!
 
 # Step 10: Install plugins
